@@ -1,0 +1,9 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+app/src/main/kotlin/com/rebbit/app/di/modules/TokenModule.kt
