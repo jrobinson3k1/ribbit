@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.rebbit.app"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="false"
+        android:label="@string/app_name"
+        tools:ignore="GoogleAppIndexingWarning">
+
+        <activity
+            android:name=".ui.ShellActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar"/>
+    </application>
+
+</manifest>

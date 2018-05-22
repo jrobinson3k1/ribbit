@@ -13,6 +13,9 @@ import com.rebbit.data.api.ListingClient
 import com.rebbit.data.model.Link
 import dagger.Module
 import dagger.Provides
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -28,6 +31,14 @@ import javax.inject.Named
     TokenModule::class
 ])
 class ApiModule {
+
+    @Provides
+    @Named("io_scheduler")
+    fun providesIoScheduler(): Scheduler = Schedulers.io()
+
+    @Provides
+    @Named("ui_scheduler")
+    fun providesUiScheduler(): Scheduler = AndroidSchedulers.mainThread()
 
     @Provides
     fun providesOkHttpClientBuilder(): OkHttpClient.Builder = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })

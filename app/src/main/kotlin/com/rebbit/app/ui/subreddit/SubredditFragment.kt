@@ -49,6 +49,7 @@ class SubredditFragment : Fragment(), SubredditView {
         }
 
         presenter.bind(this)
+        presenter.onRefresh()
     }
 
     override fun onDestroyView() {

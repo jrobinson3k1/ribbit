@@ -4,14 +4,18 @@ data class AccessTokenResponse(val accessToken: String, val tokenType: String, v
 
 data class Thing<T>(val id: String, val name: String, val kind: String, val data: T) {
 
-    enum class Kind(value: String) {
+    enum class Kind(private val value: String) {
         Comment("t1"),
         Account("t2"),
         Link("t3"),
         Message("t4"),
         Subreddit("t5"),
         Award("t6"),
-        Listing("Listing")
+        Listing("Listing");
+
+        companion object {
+            fun fromValue(value: String) = values().firstOrNull { it.value == value }
+        }
     }
 }
 
@@ -28,7 +32,7 @@ data class Link(val isCrosspostable: Boolean, val subredditId: String, val appro
                 val created: Long, val url: String, val authorFlairText: String?, val quarantine: Boolean, val title: String, val createdUtc: Long, val subredditNamePrefixed: String, val ups: Int,
                 val numComments: Int, val isSelf: Boolean, val whitelistStatus: String?, val modNote: String?, val isVideo: Boolean, val distinguished: String?, val postCategories: String?) {
 
-    enum class PostHint(vararg val value: String) {
+    enum class PostHint(private vararg val value: String) {
         Link("link"),
         Image("image"),
         Video("rich:video", "hosted:video"),

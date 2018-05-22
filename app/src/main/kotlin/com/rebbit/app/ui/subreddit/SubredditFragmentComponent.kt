@@ -6,6 +6,7 @@ import dagger.BindsInstance
 import dagger.Module
 import dagger.Provides
 import dagger.Subcomponent
+import io.reactivex.Scheduler
 import javax.inject.Named
 
 @Subcomponent(modules = [SubredditFragmentComponent.SubredditFragmentModule::class])
@@ -27,8 +28,12 @@ interface SubredditFragmentComponent {
 
         @Provides
         @PerFragment
-        fun providesPresenter(listingClient: ListingClient, @Named("subreddit") subreddit: String): SubredditPresenter {
-            return SubredditPresenterImpl(listingClient, subreddit)
+        fun providesPresenter(
+                listingClient: ListingClient,
+                @Named("subreddit") subreddit: String,
+                @Named("io_scheduler") ioScheduler: Scheduler,
+                @Named("ui_scheduler") uiScheduler: Scheduler): SubredditPresenter {
+            return SubredditPresenterImpl(listingClient, subreddit, ioScheduler, uiScheduler)
         }
     }
 }
