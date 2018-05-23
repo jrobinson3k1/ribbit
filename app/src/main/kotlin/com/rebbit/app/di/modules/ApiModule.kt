@@ -41,7 +41,7 @@ class ApiModule {
     fun providesUiScheduler(): Scheduler = AndroidSchedulers.mainThread()
 
     @Provides
-    fun providesOkHttpClientBuilder(): OkHttpClient.Builder = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+    fun providesOkHttpClient(): OkHttpClient = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }).build()
 
     @Provides
     fun providesGsonBuilder(): GsonBuilder = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -49,28 +49,28 @@ class ApiModule {
     @Provides
     @AppScope
     @Named("OAuth")
-    fun providesOAuthRetrofit(authClient: AuthClient, clientBuilder: OkHttpClient.Builder, gsonBuilder: GsonBuilder, tokenStore: TokenStore): Retrofit {
-        clientBuilder.apply {
-            addInterceptor {
-                val request = it.request().newBuilder().apply {
-                    if (tokenStore.isExpired()) retrieveToken(authClient, tokenStore)
-                    tokenStore.accessToken?.let { addAuthHeader(it) }
-                }.build()
-                it.proceed(request)
-            }
-            authenticator { _, response ->
-                if (response.responseCount() >= 2) {
-                    Timber.d("Failed to retrieve access token")
-                    return@authenticator null
+    fun providesOAuthRetrofit(authClient: AuthClient, client: OkHttpClient, gsonBuilder: GsonBuilder, tokenStore: TokenStore): Retrofit {
+        val clientBuilder = client.newBuilder()
+                .addInterceptor {
+                    val request = it.request().newBuilder().apply {
+                        if (tokenStore.isExpired()) retrieveToken(authClient, tokenStore)
+                        tokenStore.accessToken?.let { addAuthHeader(it) }
+                    }.build()
+                    it.proceed(request)
+                }
+                .authenticator { _, response ->
+                    if (response.responseCount() >= 2) {
+                        Timber.d("Failed to retrieve access token")
+                        return@authenticator null
+                    }
+
+                    Timber.d("Got 401, retrieving access token")
+                    val accessToken = retrieveToken(authClient, tokenStore)
+                    return@authenticator response.request().newBuilder()
+                            .addAuthHeader(accessToken)
+                            .build()
                 }
 
-                Timber.d("Got 401, retrieving access token")
-                val accessToken = retrieveToken(authClient, tokenStore)
-                return@authenticator response.request().newBuilder()
-                        .addAuthHeader(accessToken)
-                        .build()
-            }
-        }
         return Retrofit.Builder()
                 .baseUrl("https://oauth.reddit.com/")
                 .client(clientBuilder.build())
@@ -89,9 +89,9 @@ class ApiModule {
     @Provides
     @AppScope
     @Named("Api")
-    fun providesApiRetrofit(clientBuilder: OkHttpClient.Builder, gsonBuilder: GsonBuilder): Retrofit = Retrofit.Builder()
+    fun providesApiRetrofit(client: OkHttpClient, gsonBuilder: GsonBuilder): Retrofit = Retrofit.Builder()
             .baseUrl("https://www.reddit.com/api/")
-            .client(clientBuilder.build())
+            .client(client)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
             .build()

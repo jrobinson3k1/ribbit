@@ -33,13 +33,14 @@ data class Link(val isCrosspostable: Boolean, val subredditId: String, val appro
                 val numComments: Int, val isSelf: Boolean, val whitelistStatus: String?, val modNote: String?, val isVideo: Boolean, val distinguished: String?, val postCategories: String?) {
 
     enum class PostHint(private vararg val value: String) {
+        Unknown(""),
         Link("link"),
         Image("image"),
         Video("rich:video", "hosted:video"),
         Self("self");
 
         companion object {
-            fun fromValue(value: String) = values().firstOrNull { it.value.contains(value) }
+            fun fromValue(value: String) = values().firstOrNull { it.value.contains(value) } ?: Unknown
         }
     }
 }

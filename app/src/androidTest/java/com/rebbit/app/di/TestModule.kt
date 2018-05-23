@@ -1,7 +1,6 @@
 package com.rebbit.app.di
 
 import android.content.Context
-import android.test.mock.MockContext
 import com.nhaarman.mockito_kotlin.mock
 import com.rebbit.app.store.UserStore
 import com.rebbit.app.ui.subreddit.SubredditPresenter
@@ -28,14 +27,15 @@ class TestModule {
     fun providesContext(): Context = mock()
 
     @Provides
-    fun providesUserStore():UserStore = mock()
+    fun providesUserStore(): UserStore = mock()
 
     @Provides
-    fun providesAuthClient():AuthClient = mock()
+    fun providesAuthClient(): AuthClient = mock()
 
     @Provides
     fun providesListingClient(): ListingClient = mock()
 
     @Provides
+    @AppScope
     fun providesSubredditPresenter(): SubredditPresenter = mock()
 }

@@ -1,6 +1,5 @@
 package com.rebbit.app.di
 
-import android.content.Context
 import com.rebbit.app.di.components.ApplicationComponent
 import com.rebbit.app.ui.subreddit.SubredditFragmentTestComponent
 import com.rebbit.app.ui.subreddit.SubredditPresenter
@@ -10,9 +9,7 @@ import dagger.Component
 @Component(modules = [TestModule::class])
 interface TestApplicationComponent : ApplicationComponent {
 
-//    fun subredditPresenter(): SubredditPresenter
-
-    fun context(): Context
+    fun subredditPresenter(): SubredditPresenter
 
     override fun subredditFragmentBuilder(): SubredditFragmentTestComponent.Builder
 }
