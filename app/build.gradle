@@ -32,7 +32,7 @@ android {
     }
 
     packagingOptions {
-        exclude 'mockito-extensions/org.mockito.plugins.MockMaker'
+        pickFirst 'mockito-extensions/org.mockito.plugins.MockMaker'
     }
 }
 
