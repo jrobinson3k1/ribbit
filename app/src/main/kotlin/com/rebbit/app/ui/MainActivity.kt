@@ -34,8 +34,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        supportFragmentManager.beginTransaction().replace(R.id.content, SubredditFragment.newInstance("all")).commit()
-        title = "all"
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction().replace(R.id.content, SubredditFragment.newInstance("all")).commit()
+            title = "all"
+        }
     }
 
     override fun onBackPressed() {

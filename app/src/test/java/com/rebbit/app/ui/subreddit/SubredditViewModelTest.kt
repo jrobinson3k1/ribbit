@@ -12,9 +12,9 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
-class SubredditPresenterTest {
+class SubredditViewModelTest {
 
-    private lateinit var presenter: SubredditPresenter
+    private lateinit var presenter: SubredditViewModel
     private lateinit var testScheduler: TestScheduler
 
     @Mock

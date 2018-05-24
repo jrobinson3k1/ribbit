@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.rebbit.app"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -45,43 +45,57 @@ kapt {
 dependencies {
     implementation project(':data')
 
+    def support_version = "27.1.1"
+    def lifecycle_version = "1.1.1"
+    def dagger_version = "2.16"
+    def glide_version = "4.7.1"
+    def retrofit_version = "2.4.0"
+    def mockito_version = "2.18.3"
+    def test_support_version = "1.0.2"
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:support-v4:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
+    implementation "com.android.support:support-v4:$support_version"
+    implementation "com.android.support:design:$support_version"
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    kapt "androidx.databinding:databinding-compiler:$android_gradle_version"
+
+    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
+    implementation "android.arch.lifecycle:reactivestreams:$lifecycle_version"
+    kapt "android.arch.lifecycle:compiler:$lifecycle_version"
 
     implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
 
     implementation 'com.jakewharton.timber:timber:4.7.0'
 
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    kapt 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
 
-    implementation 'com.google.dagger:dagger:2.16'
-    kapt 'com.google.dagger:dagger-compiler:2.16'
-    kapt 'com.google.dagger:dagger-android-processor:2.16'
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-inline:2.18.3'
+    testImplementation "org.mockito:mockito-inline:$mockito_version"
     testImplementation 'com.nhaarman:mockito-kotlin:1.5.0'
+    testImplementation "android.arch.core:core-testing:$lifecycle_version"
 
-    kaptAndroidTest 'com.google.dagger:dagger-compiler:2.16'
-    kaptAndroidTest 'com.google.dagger:dagger-android-processor:2.16'
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
+    kaptAndroidTest "com.google.dagger:dagger-android-processor:$dagger_version"
 
     androidTestImplementation 'com.android.support:support-annotations:27.1.1'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation "com.android.support.test:runner:$test_support_version"
+    androidTestImplementation "com.android.support.test:rules:$test_support_version"
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    androidTestImplementation 'org.mockito:mockito-android:2.18.3'
+    androidTestImplementation "org.mockito:mockito-android:$mockito_version"
     androidTestImplementation 'com.nhaarman:mockito-kotlin:1.5.0'
     androidTestImplementation 'com.github.tmurakami:dexopener:0.12.1'
 }

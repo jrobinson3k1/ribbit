@@ -1,5 +1,9 @@
 package com.rebbit.app.ui.subreddit
 
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
+import android.support.v4.app.Fragment
 import com.rebbit.app.di.PerFragment
 import com.rebbit.data.api.ListingClient
 import dagger.BindsInstance
@@ -20,6 +24,9 @@ interface SubredditFragmentComponent {
         @BindsInstance
         fun subreddit(@Named("subreddit") subreddit: String): SubredditFragmentComponent.Builder
 
+        @BindsInstance
+        fun fragment(@Named("this_fragment") fragment: Fragment): SubredditFragmentComponent.Builder
+
         fun build(): SubredditFragmentComponent
     }
 
@@ -28,12 +35,20 @@ interface SubredditFragmentComponent {
 
         @Provides
         @PerFragment
-        fun providesPresenter(
+        fun providesViewModel(
+                @Named("this_fragment") fragment: Fragment,
                 listingClient: ListingClient,
                 @Named("subreddit") subreddit: String,
                 @Named("io_scheduler") ioScheduler: Scheduler,
-                @Named("ui_scheduler") uiScheduler: Scheduler): SubredditPresenter {
-            return SubredditPresenterImpl(listingClient, subreddit, ioScheduler, uiScheduler)
+                @Named("ui_scheduler") uiScheduler: Scheduler): SubredditViewModel {
+            return ViewModelProviders.of(fragment, object : ViewModelProvider.Factory {
+                override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                    return modelClass
+                            .getConstructor(ListingClient::class.java, String::class.java, Scheduler::class.java, Scheduler::class.java)
+                            .newInstance(listingClient, subreddit, ioScheduler, uiScheduler)
+                }
+
+            }).get(SubredditViewModel::class.java)
         }
     }
 }

@@ -3,7 +3,7 @@ package com.rebbit.app.di
 import android.content.Context
 import com.nhaarman.mockito_kotlin.mock
 import com.rebbit.app.store.UserStore
-import com.rebbit.app.ui.subreddit.SubredditPresenter
+import com.rebbit.app.ui.subreddit.SubredditViewModel
 import com.rebbit.data.api.AuthClient
 import com.rebbit.data.api.ListingClient
 import dagger.Module
@@ -37,5 +37,5 @@ class TestModule {
 
     @Provides
     @AppScope
-    fun providesSubredditPresenter(): SubredditPresenter = mock()
+    fun providesSubredditPresenter(): SubredditViewModel = mock()
 }

@@ -1,5 +1,6 @@
 package com.rebbit.app.ui.subreddit
 
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -15,16 +16,17 @@ import com.rebbit.app.di.Injector
 import com.rebbit.data.model.Link
 import javax.inject.Inject
 
-class SubredditFragment : Fragment(), SubredditView {
+class SubredditFragment : Fragment() {
 
     @Inject
-    lateinit var presenter: SubredditPresenter
+    lateinit var viewModel: SubredditViewModel
 
     private lateinit var binding: FragmentSubredditBinding
     private lateinit var adapter: SubredditAdapter
 
     override fun onAttach(context: Context?) {
         Injector.get().subredditFragmentBuilder()
+                .fragment(this)
                 .subreddit(arguments!!.getString(ARG_SUBREDDIT)!!)
                 .build()
                 .inject(this)
@@ -33,10 +35,7 @@ class SubredditFragment : Fragment(), SubredditView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate<FragmentSubredditBinding>(inflater, R.layout.fragment_subreddit, container, false).apply {
-            presenter = this@SubredditFragment.presenter
-        }
-
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_subreddit, container, false)
         return binding.root
     }
 
@@ -48,24 +47,20 @@ class SubredditFragment : Fragment(), SubredditView {
             binding.recyclerView.adapter = this
         }
 
-        presenter.bind(this)
-        presenter.onRefresh()
+        viewModel.getLinks().observe(this, Observer { links ->
+            if (links != null) showLinks(links)
+        })
     }
 
-    override fun onDestroyView() {
-        presenter.unBind()
-        super.onDestroyView()
-    }
-
-    override fun setRefreshing(refreshing: Boolean) {
+    fun setRefreshing(refreshing: Boolean) {
         binding.swipeRefreshLayout.isRefreshing = refreshing
     }
 
-    override fun showLinks(links: List<Link>) {
+    fun showLinks(links: List<Link>) {
         adapter.setLinks(links)
     }
 
-    override fun onError(message: String) {
+    fun onError(message: String) {
         Toast.makeText(context!!, message, Toast.LENGTH_LONG).show()
     }
 

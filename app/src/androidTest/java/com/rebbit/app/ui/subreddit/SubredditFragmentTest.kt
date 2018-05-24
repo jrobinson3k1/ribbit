@@ -2,16 +2,12 @@ package com.rebbit.app.ui.subreddit
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.OnLifecycleEvent
-import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.runner.AndroidJUnit4
-import com.github.tmurakami.dexopener.DexOpener
-import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.inOrder
-import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.rebbit.app.BaseFragmentTest
 import com.rebbit.app.ModelCreator
@@ -24,7 +20,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class SubredditFragmentTest : BaseFragmentTest<SubredditFragment>() {
 
-    private lateinit var presenter: SubredditPresenter
+    private lateinit var presenter: SubredditViewModel
     private lateinit var view: SubredditView
 
     @Before
