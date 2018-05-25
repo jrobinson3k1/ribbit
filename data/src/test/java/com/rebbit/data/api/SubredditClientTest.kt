@@ -9,30 +9,30 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
-class ListingClientTest {
+class SubredditClientTest {
 
-    private lateinit var client: ListingClient
+    private lateinit var client: SubredditClient
 
     @Mock
-    private lateinit var listingApi: ListingApi
+    private lateinit var subredditApi: SubredditApi
 
     @Before
     fun init() {
         MockitoAnnotations.initMocks(this)
-        client = ListingClient(listingApi)
+        client = SubredditClient(subredditApi)
     }
 
     @Test
     fun testAccessToken() {
         val listingThing = mock<Thing<Listing>>()
-        whenever(listingApi.getHot("subreddit")).thenReturn(Single.just(listingThing))
+        whenever(subredditApi.getHot("subreddit")).thenReturn(Single.just(listingThing))
 
-        client.getSubreddit("subreddit")
+        client.getHot("subreddit")
                 .test()
                 .assertComplete()
                 .assertNoErrors()
                 .assertValue(listingThing)
 
-        verify(listingApi).getHot(eq("subreddit"), isNull(), isNull(), eq(0), eq(25), isNull())
+        verify(subredditApi).getHot(eq("subreddit"), isNull(), isNull(), eq(0), eq(25), isNull())
     }
 }

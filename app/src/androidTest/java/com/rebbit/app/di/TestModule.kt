@@ -5,7 +5,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.rebbit.app.store.UserStore
 import com.rebbit.app.ui.subreddit.SubredditViewModel
 import com.rebbit.data.api.AuthClient
-import com.rebbit.data.api.ListingClient
+import com.rebbit.data.api.SubredditClient
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Scheduler
@@ -33,7 +33,7 @@ class TestModule {
     fun providesAuthClient(): AuthClient = mock()
 
     @Provides
-    fun providesListingClient(): ListingClient = mock()
+    fun providesListingClient(): SubredditClient = mock()
 
     @Provides
     @AppScope

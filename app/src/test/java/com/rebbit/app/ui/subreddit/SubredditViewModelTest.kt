@@ -1,8 +1,8 @@
 package com.rebbit.app.ui.subreddit
 
 import com.nhaarman.mockito_kotlin.*
-import com.rebbit.data.api.ListingClient
-import com.rebbit.data.model.Link
+import com.rebbit.data.api.SubredditClient
+import com.rebbit.data.model.Post
 import com.rebbit.data.model.Listing
 import com.rebbit.data.model.Thing
 import io.reactivex.Single
@@ -18,7 +18,7 @@ class SubredditViewModelTest {
     private lateinit var testScheduler: TestScheduler
 
     @Mock
-    private lateinit var listingClient: ListingClient
+    private lateinit var subredditClient: SubredditClient
     @Mock
     private lateinit var view: SubredditView
 
@@ -27,13 +27,13 @@ class SubredditViewModelTest {
         MockitoAnnotations.initMocks(this)
 
         testScheduler = TestScheduler()
-        presenter = SubredditPresenterImpl(listingClient, "subreddit", testScheduler, testScheduler).apply { bind(view) }
+        presenter = SubredditPresenterImpl(subredditClient, "subreddit", testScheduler, testScheduler).apply { bind(view) }
     }
 
     @Test
     fun testOnRefresh() {
-        val link = mock<Link>()
-        val linkThing = mock<Thing<Link>> {
+        val link = mock<Post>()
+        val linkThing = mock<Thing<Post>> {
             on { data } doReturn link
         }
         val listing = mock<Listing> {
@@ -43,13 +43,13 @@ class SubredditViewModelTest {
             on { data } doReturn listing
         }
 
-        whenever(listingClient.getSubreddit(any())).thenReturn(Single.just(listingThing))
+        whenever(subredditClient.getHot(any())).thenReturn(Single.just(listingThing))
 
         presenter.onRefresh()
         testScheduler.triggerActions()
 
-        inOrder(listingClient, view) {
-            verify(listingClient).getSubreddit(eq("subreddit"))
+        inOrder(subredditClient, view) {
+            verify(subredditClient).getHot(eq("subreddit"))
             verify(view).setRefreshing(eq(true))
             verify(view).showLinks(eq(listOf(link)))
             verify(view).setRefreshing(eq(false))

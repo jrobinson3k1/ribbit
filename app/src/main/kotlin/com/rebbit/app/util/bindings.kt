@@ -13,14 +13,13 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.rebbit.app.R
-import com.rebbit.data.model.Link
+import com.rebbit.data.model.Post
 
-
-@BindingAdapter("app:thumbnailUrl", "app:postHint", requireAll = true)
-fun ImageView.setThumbnailUrl(thumbnailUrl: String?, postHint: Link.PostHint?) {
+@BindingAdapter("thumbnailUrl", "hint", requireAll = true)
+fun ImageView.setThumbnailUrl(thumbnailUrl: String?, hint: Post.Hint?) {
     var requestBuilder: RequestBuilder<Bitmap> = Glide.with(this).asBitmap()
     requestBuilder = when {
-        postHint == Link.PostHint.Self -> requestBuilder.load(R.drawable.ic_text)
+        hint == Post.Hint.Self -> requestBuilder.load(R.drawable.ic_text)
         thumbnailUrl == null || !thumbnailUrl.isImage() -> requestBuilder.load(R.drawable.ic_link)
         else -> requestBuilder.load(thumbnailUrl)
     }
@@ -29,10 +28,10 @@ fun ImageView.setThumbnailUrl(thumbnailUrl: String?, postHint: Link.PostHint?) {
         override fun setResource(resource: Bitmap?) {
             var circularBitmapDrawable: RoundedBitmapDrawable? = null
             if (resource != null) {
-                val colorResId = when (postHint) {
-                    Link.PostHint.Image -> R.color.dark_pastel_blue
-                    Link.PostHint.Video -> R.color.pastel_pink
-                    Link.PostHint.Self -> android.R.color.transparent
+                val colorResId = when (hint) {
+                    Post.Hint.Image -> R.color.dark_pastel_blue
+                    Post.Hint.Video -> R.color.pastel_pink
+                    Post.Hint.Self -> android.R.color.transparent
                     else -> android.R.color.black
                 }
 
@@ -44,17 +43,19 @@ fun ImageView.setThumbnailUrl(thumbnailUrl: String?, postHint: Link.PostHint?) {
     })
 }
 
-private fun String.isImage() = matches(Regex("^.+\\.(?:jpg|png)\$"))
-
-@BindingAdapter("app:refreshing")
+@BindingAdapter("refreshing")
 fun setRefreshing(swipeRefreshLayout: SwipeRefreshLayout, refreshing: Boolean) {
     swipeRefreshLayout.isRefreshing = refreshing
 }
 
-@BindingAdapter("app:onRefresh")
-fun setOnRefresh(swipeRefreshLayout: SwipeRefreshLayout, onRefresh: SwipeRefreshLayout.OnRefreshListener?) {
-    swipeRefreshLayout.setOnRefreshListener(onRefresh)
+@BindingAdapter("onRefresh")
+fun setOnRefresh(swipeRefreshLayout: SwipeRefreshLayout, onRefresh: Runnable) {
+    swipeRefreshLayout.setOnRefreshListener { onRefresh.run() }
 }
+
+private val IMAGE_REGEX = Regex("^.+\\.(?:jpg|png)\$")
+
+private fun String.isImage() = matches(IMAGE_REGEX)
 
 private fun addBorder(resource: Bitmap, context: Context, colorResId: Int): Bitmap {
     val w = resource.width

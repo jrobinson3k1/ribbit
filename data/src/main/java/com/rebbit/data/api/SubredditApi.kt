@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface ListingApi {
+interface SubredditApi {
 
     @GET("r/{subreddit}/hot?g=GLOBAL")
     fun getHot(

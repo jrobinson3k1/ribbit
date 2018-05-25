@@ -1,6 +1,5 @@
 package com.rebbit.app.ui.subreddit
 
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -9,11 +8,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.rebbit.app.R
 import com.rebbit.app.databinding.FragmentSubredditBinding
 import com.rebbit.app.di.Injector
-import com.rebbit.data.model.Link
+import com.rebbit.data.model.NetworkState
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
 class SubredditFragment : Fragment() {
@@ -22,7 +23,8 @@ class SubredditFragment : Fragment() {
     lateinit var viewModel: SubredditViewModel
 
     private lateinit var binding: FragmentSubredditBinding
-    private lateinit var adapter: SubredditAdapter
+
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onAttach(context: Context?) {
         Injector.get().subredditFragmentBuilder()
@@ -36,32 +38,29 @@ class SubredditFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_subreddit, container, false)
+        binding.viewModel = viewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
-        with(SubredditAdapter(view.context)) {
-            adapter = this
+        SubredditAdapter({ viewModel.retry() }).apply {
             binding.recyclerView.adapter = this
+            viewModel.posts.safeSubscribe { submitList(it) }
+            viewModel.networkState.safeSubscribe { setNetworkState(it) }
         }
 
-        viewModel.getLinks().observe(this, Observer { links ->
-            if (links != null) showLinks(links)
-        })
+        viewModel.refreshState.safeSubscribe { binding.swipeRefreshLayout.isRefreshing = it == NetworkState.LOADING }
     }
 
-    fun setRefreshing(refreshing: Boolean) {
-        binding.swipeRefreshLayout.isRefreshing = refreshing
+    override fun onDestroy() {
+        compositeDisposable.clear()
+        super.onDestroy()
     }
 
-    fun showLinks(links: List<Link>) {
-        adapter.setLinks(links)
-    }
-
-    fun onError(message: String) {
-        Toast.makeText(context!!, message, Toast.LENGTH_LONG).show()
+    fun <T> Observable<T>.safeSubscribe(onNext: (T) -> Unit) {
+        subscribe(onNext).addTo(compositeDisposable)
     }
 
     companion object {

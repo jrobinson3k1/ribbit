@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.Fragment
 import com.rebbit.app.di.PerFragment
-import com.rebbit.data.api.ListingClient
+import com.rebbit.data.api.SubredditClient
 import dagger.BindsInstance
 import dagger.Module
 import dagger.Provides
@@ -37,15 +37,14 @@ interface SubredditFragmentComponent {
         @PerFragment
         fun providesViewModel(
                 @Named("this_fragment") fragment: Fragment,
-                listingClient: ListingClient,
+                subredditClient: SubredditClient,
                 @Named("subreddit") subreddit: String,
                 @Named("io_scheduler") ioScheduler: Scheduler,
                 @Named("ui_scheduler") uiScheduler: Scheduler): SubredditViewModel {
             return ViewModelProviders.of(fragment, object : ViewModelProvider.Factory {
                 override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                    return modelClass
-                            .getConstructor(ListingClient::class.java, String::class.java, Scheduler::class.java, Scheduler::class.java)
-                            .newInstance(listingClient, subreddit, ioScheduler, uiScheduler)
+                    @Suppress("UNCHECKED_CAST")
+                    return SubredditViewModel(subredditClient, subreddit, ioScheduler, uiScheduler) as T
                 }
 
             }).get(SubredditViewModel::class.java)

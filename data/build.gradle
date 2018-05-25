@@ -26,7 +26,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation "android.arch.paging:runtime:$paging_version"
+    implementation "android.arch.paging:rxjava2:1.0.0-rc1"
 
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
 

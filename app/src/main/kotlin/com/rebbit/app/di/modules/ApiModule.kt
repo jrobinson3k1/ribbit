@@ -8,9 +8,9 @@ import com.rebbit.app.di.AppScope
 import com.rebbit.app.store.TokenStore
 import com.rebbit.data.api.AuthApi
 import com.rebbit.data.api.AuthClient
-import com.rebbit.data.api.ListingApi
-import com.rebbit.data.api.ListingClient
-import com.rebbit.data.model.Link
+import com.rebbit.data.api.SubredditApi
+import com.rebbit.data.api.SubredditClient
+import com.rebbit.data.model.Post
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Scheduler
@@ -79,8 +79,8 @@ class ApiModule {
                         .registerTypeAdapter<Int> {
                             deserialize { it.json.asIntOrNull }
                         }
-                        .registerTypeAdapter<Link.PostHint> {
-                            deserialize { Link.PostHint.fromValue(it.json.asString) }
+                        .registerTypeAdapter<Post.Hint> {
+                            deserialize { Post.Hint.fromValue(it.json.asString) }
                         }
                         .create()))
                 .build()
@@ -98,7 +98,7 @@ class ApiModule {
 
     @Provides
     @AppScope
-    fun providesListingClient(@Named("OAuth") retrofit: Retrofit): ListingClient = ListingClient(retrofit.create(ListingApi::class.java))
+    fun providesListingClient(@Named("OAuth") retrofit: Retrofit): SubredditClient = SubredditClient(retrofit.create(SubredditApi::class.java))
 
     @Provides
     @AppScope

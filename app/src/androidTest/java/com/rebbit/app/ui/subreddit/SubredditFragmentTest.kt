@@ -12,7 +12,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import com.rebbit.app.BaseFragmentTest
 import com.rebbit.app.ModelCreator
 import com.rebbit.app.R
-import com.rebbit.data.model.Link
+import com.rebbit.data.model.Post
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -35,12 +35,12 @@ class SubredditFragmentTest : BaseFragmentTest<SubredditFragment>() {
     @Test
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun testInitialState() {
-        val link = ModelCreator.link(
+        val link = ModelCreator.post(
                 title = "Title",
                 author = "Author",
                 subreddit = "subreddit",
                 createdUtc = 10000000,
-                postHint = Link.PostHint.Image
+                hint = Post.Hint.Image
         )
 
         whenever(presenter.onRefresh()).thenAnswer {

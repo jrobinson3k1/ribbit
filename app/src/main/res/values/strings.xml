@@ -9,6 +9,7 @@
     <string name="link_info">%1$s ago to %2$s</string>
     <string name="link_info_with_author">%1$s ago by %2$s to %3$s</string>
     <string name="app_name">Ribbit for Reddit</string>
+    <string name="retry">Retry</string>
     <plurals name="years">
         <item quantity="one">%d year</item>
         <item quantity="other">%d years</item>
