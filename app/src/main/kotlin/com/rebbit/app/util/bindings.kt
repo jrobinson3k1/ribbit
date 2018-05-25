@@ -15,7 +15,7 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.rebbit.app.R
 import com.rebbit.data.model.Post
 
-@BindingAdapter("thumbnailUrl", "hint", requireAll = true)
+@BindingAdapter("thumbnailUrl", "postHint", requireAll = true)
 fun ImageView.setThumbnailUrl(thumbnailUrl: String?, hint: Post.Hint?) {
     var requestBuilder: RequestBuilder<Bitmap> = Glide.with(this).asBitmap()
     requestBuilder = when {

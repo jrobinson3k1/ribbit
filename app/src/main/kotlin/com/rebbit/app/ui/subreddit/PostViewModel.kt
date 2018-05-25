@@ -22,6 +22,6 @@ class PostViewModel(private val showAuthor: Boolean) {
                 }
         )
         thumbnailUrl.set(post?.thumbnail)
-        hint.set(post?.hint)
+        hint.set(post?.postHint)
     }
 }
