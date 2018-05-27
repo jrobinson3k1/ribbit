@@ -16,15 +16,15 @@ class PostViewModel(private val showAuthor: Boolean) {
     val hint: ObservableField<Post.Hint> = ObservableField()
 
     fun bind(context: Context, post: Post?) {
-        title.set(post?.title)
-        info.set(
-                post?.let {
-                    if (showAuthor) context.getString(R.string.link_info, TimeUtil.toTimeDisplay(context, post.createdUtc), post.subreddit)
-                    else context.getString(R.string.link_info_with_author, TimeUtil.toTimeDisplay(context, post.createdUtc), post.author, post.subreddit)
-                }
-        )
-        thumbnailUrl.set(post?.thumbnail)
-        hint.set(post?.postHint)
+        post?.toPostView()?.let {
+            title.set(it.title)
+            info.set(
+                    if (showAuthor) context.getString(R.string.link_info, TimeUtil.toTimeDisplay(context, it.createdUtc), it.subreddit)
+                    else context.getString(R.string.link_info_with_author, TimeUtil.toTimeDisplay(context, it.createdUtc), it.author, it.subreddit)
+            )
+            thumbnailUrl.set(it.thumbnailUrl)
+            hint.set(it.hint)
+        }
     }
 
     data class PostView(val title: String,

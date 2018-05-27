@@ -13,11 +13,12 @@ import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.rebbit.app.R
+import com.rebbit.app.di.Injector
 import com.rebbit.data.model.Post
 
 @BindingAdapter("thumbnailUrl", "postHint", requireAll = true)
 fun ImageView.setThumbnailUrl(thumbnailUrl: String?, hint: Post.Hint?) {
-    var requestBuilder: RequestBuilder<Bitmap> = Glide.with(this).asBitmap()
+    var requestBuilder: RequestBuilder<Bitmap> = Injector.get().requestManagerRetriever().get(this).asBitmap()
     requestBuilder = when {
         hint == Post.Hint.Self -> requestBuilder.load(R.drawable.ic_text)
         thumbnailUrl == null || !thumbnailUrl.isImage() -> requestBuilder.load(R.drawable.ic_link)
