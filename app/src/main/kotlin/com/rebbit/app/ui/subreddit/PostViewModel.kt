@@ -6,6 +6,8 @@ import com.rebbit.app.R
 import com.rebbit.app.util.TimeUtil
 import com.rebbit.data.model.Post
 
+fun Post.toPostView() = PostViewModel.PostView(title, createdUtc, author, subreddit, thumbnail, postHint)
+
 class PostViewModel(private val showAuthor: Boolean) {
 
     val title: ObservableField<String> = ObservableField()
@@ -24,4 +26,11 @@ class PostViewModel(private val showAuthor: Boolean) {
         thumbnailUrl.set(post?.thumbnail)
         hint.set(post?.postHint)
     }
+
+    data class PostView(val title: String,
+                        val createdUtc: Long,
+                        val author: String,
+                        val subreddit: String,
+                        val thumbnailUrl: String,
+                        val hint: Post.Hint?)
 }

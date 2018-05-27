@@ -3,7 +3,6 @@ package com.rebbit.app.ui.subreddit
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -11,20 +10,16 @@ import android.view.ViewGroup
 import com.rebbit.app.R
 import com.rebbit.app.databinding.FragmentSubredditBinding
 import com.rebbit.app.di.Injector
+import com.rebbit.app.ui.BaseFragment
 import com.rebbit.data.model.NetworkState
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
-class SubredditFragment : Fragment() {
+class SubredditFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModel: SubredditViewModel
 
     private lateinit var binding: FragmentSubredditBinding
-
-    private val compositeDisposable = CompositeDisposable()
 
     override fun onAttach(context: Context?) {
         Injector.get().subredditFragmentBuilder()
@@ -51,16 +46,7 @@ class SubredditFragment : Fragment() {
             viewModel.networkState.safeSubscribe { setNetworkState(it) }
         }
 
-        viewModel.refreshState.safeSubscribe { binding.swipeRefreshLayout.isRefreshing = it == NetworkState.LOADING }
-    }
-
-    override fun onDestroy() {
-        compositeDisposable.clear()
-        super.onDestroy()
-    }
-
-    fun <T> Observable<T>.safeSubscribe(onNext: (T) -> Unit) {
-        subscribe(onNext).addTo(compositeDisposable)
+        viewModel.refreshState.safeSubscribe { if (it == NetworkState.LOADED) binding.swipeRefreshLayout.isRefreshing = false }
     }
 
     companion object {

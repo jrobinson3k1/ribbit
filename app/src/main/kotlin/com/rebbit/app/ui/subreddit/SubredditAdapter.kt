@@ -122,7 +122,7 @@ class SubredditAdapter(private val retryCallback: () -> Unit, private val isMult
     companion object {
         val POST_COMPARATOR = object : DiffUtil.ItemCallback<Post>() {
             override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean =
-                    oldItem == newItem
+                    oldItem.toPostView() == newItem.toPostView()
 
             override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =
                     oldItem.name == newItem.name
