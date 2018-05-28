@@ -35,7 +35,7 @@ class SubredditAdapter(private val retryCallback: () -> Unit, private val isMult
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            R.layout.item_post -> (holder as PostViewHolder).bind(getItem(position))
+            R.layout.item_post -> (holder as PostViewHolder).bind(getItem(position)!!)
             R.layout.item_network_state -> (holder as NetworkStateViewHolder).bind(networkState)
         }
     }
@@ -66,21 +66,21 @@ class SubredditAdapter(private val retryCallback: () -> Unit, private val isMult
 
     private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
 
-    class PostViewHolder(private val binding: ItemPostBinding, showAuthor: Boolean) : RecyclerView.ViewHolder(binding.root) {
+    class PostViewHolder(private val binding: ItemPostBinding, showSubreddit: Boolean) : RecyclerView.ViewHolder(binding.root) {
 
-        private val viewModel = PostViewModel(showAuthor).apply { binding.viewModel = this }
+        private val viewModel = PostViewModel(binding.root.context, showSubreddit).apply { binding.viewModel = this }
 
-        fun bind(post: Post?) {
-            viewModel.bind(itemView.context, post)
+        fun bind(post: Post) {
+            viewModel.bind(post.toPostView())
             binding.executePendingBindings()
         }
 
         companion object {
-            fun create(parent: ViewGroup, showAuthor: Boolean) = PostViewHolder(DataBindingUtil.inflate(
+            fun create(parent: ViewGroup, showSubreddit: Boolean) = PostViewHolder(DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
                     R.layout.item_post, parent,
                     false
-            ), showAuthor)
+            ), showSubreddit)
         }
     }
 

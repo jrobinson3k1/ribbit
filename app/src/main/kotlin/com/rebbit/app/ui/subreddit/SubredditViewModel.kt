@@ -5,7 +5,7 @@ import com.rebbit.data.api.SubredditClient
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 
-class SubredditViewModel(client: SubredditClient, subreddit: String, ioScheduler: Scheduler, uiScheduler: Scheduler) : ViewModel() {
+class SubredditViewModel(client: SubredditClient, val subreddit: String, ioScheduler: Scheduler, uiScheduler: Scheduler) : ViewModel() {
 
     private val disposables = CompositeDisposable()
     private val result by lazy { client.getHot(subreddit, ioScheduler, uiScheduler, disposables, 30) }
@@ -24,5 +24,11 @@ class SubredditViewModel(client: SubredditClient, subreddit: String, ioScheduler
 
     fun refresh() {
         result.refresh.invoke()
+    }
+
+    fun isMultiReddit() = DEFAULT_MULTIREDDITS.contains(subreddit)
+
+    companion object {
+        val DEFAULT_MULTIREDDITS = listOf("all", "popular")
     }
 }

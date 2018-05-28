@@ -4,16 +4,27 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion targetSdk
 
     defaultConfig {
         applicationId "com.rebbit.app"
-        minSdkVersion 24
-        targetSdkVersion 27
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner 'com.github.tmurakami.dexopener.DexOpenerAndroidJUnitRunner'
+    }
+
+    flavorDimensions "data"
+    productFlavors {
+        mock {
+            dimension "data"
+            applicationIdSuffix ".mock"
+        }
+        api {
+            dimension "data"
+        }
     }
 
     buildTypes {
@@ -25,6 +36,8 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        mock.java.srcDirs += 'src/mock/kotlin'
+        api.java.srcDirs += 'src/api/kotlin'
     }
 
     dataBinding {
@@ -79,19 +92,22 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-inline:$mockito_version"
-    testImplementation 'com.nhaarman:mockito-kotlin:1.5.0'
+    testImplementation "com.nhaarman:mockito-kotlin:$mockito_kotlin_version"
     testImplementation "android.arch.core:core-testing:$lifecycle_version"
     testImplementation "android.arch.paging:common:$paging_version"
 
     kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
     kaptAndroidTest "com.google.dagger:dagger-android-processor:$dagger_version"
 
+    androidTestImplementation project(':testutil')
     androidTestImplementation 'com.android.support:support-annotations:27.1.1'
     androidTestImplementation "com.android.support.test:runner:$test_support_version"
     androidTestImplementation "com.android.support.test:rules:$test_support_version"
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     androidTestImplementation "org.mockito:mockito-android:$mockito_version"
-    androidTestImplementation 'com.nhaarman:mockito-kotlin:1.5.0'
+    androidTestImplementation "com.nhaarman:mockito-kotlin:$mockito_kotlin_version"
     androidTestImplementation 'com.github.tmurakami:dexopener:0.12.1'
+
+    mockImplementation project(':testutil')
 }

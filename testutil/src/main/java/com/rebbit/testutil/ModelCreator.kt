@@ -1,4 +1,4 @@
-package com.rebbit.app
+package com.rebbit.testutil
 
 import com.rebbit.data.model.Image
 import com.rebbit.data.model.Post
@@ -11,7 +11,7 @@ object ModelCreator {
              suggestedSort: String? = null, userReports: List<String> = listOf(), isRedditMediaDomain: Boolean = false, saved: Boolean = false, id: String = "", bannedAtUtc: String? = null,
              modReasonTitle: String? = null, viewCount: Int? = null, archived: Boolean = false, clicked: Boolean = false, noFollow: Boolean = false, author: String = "", numCrossposts: Int = 0, linkFlairText: String = "",
              canModPost: Boolean = false, sendReplies: Boolean = false, pinned: Boolean = false, score: Int = 0, approvedBy: String? = null, over18: Boolean = false, reportReasons: String? = null, domain: String = "",
-             hidden: Boolean = false, preview: Preview = ModelCreator.preview(), pwls: Int = 0, thumbnail: String = "", edited: Int? = null, linkFlairCssClass: String? = null, authorFlairCssClass: String? = null, contentMode: Boolean = false,
+             hidden: Boolean = false, preview: Preview = preview(), pwls: Int = 0, thumbnail: String = "", edited: Int? = null, linkFlairCssClass: String? = null, authorFlairCssClass: String? = null, contentMode: Boolean = false,
              gilded: Int = 0, locked: Boolean = false, downs: Int = 0, modReports: List<String> = listOf(), subredditSubscribers: Int = 0, hint: Post.Hint = Post.Hint.Image, stickied: Boolean = false, visited: Boolean = false,
              canGild: Boolean = false, thumbnailHeight: Int? = null, name: String = "", spoiler: Boolean = false, permalink: String = "", subredditType: String = "", parentWhitelistStatus: String = "", hideScore: Boolean = false,
              created: Long = 0, url: String = "", authorFlairText: String? = null, quarantine: Boolean = false, title: String = "", createdUtc: Long = 0, subredditNamePrefixed: String = "", ups: Int = 0,

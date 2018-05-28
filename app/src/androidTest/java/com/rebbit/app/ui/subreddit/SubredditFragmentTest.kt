@@ -10,7 +10,7 @@ import android.support.test.runner.AndroidJUnit4
 import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.whenever
 import com.rebbit.app.BaseFragmentTest
-import com.rebbit.app.ModelCreator
+import com.rebbit.testutil.ModelCreator
 import com.rebbit.app.R
 import com.rebbit.data.model.Post
 import org.junit.Before

@@ -13,45 +13,92 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="2dp"
+        android:background="#ffffff"
         android:gravity="center_vertical"
-        android:paddingLeft="8dp"
-        android:paddingTop="16dp"
-        android:paddingRight="8dp"
-        android:paddingBottom="16dp">
-
-        <ImageView
-            android:id="@+id/iconImageView"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_gravity="center"
-            app:postHint="@{viewModel.hint}"
-            app:thumbnailUrl="@{viewModel.thumbnailUrl}"
-            tools:srcCompat="@tools:sample/avatars" />
+        android:padding="8dp">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/titleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu"
                 android:text="@{viewModel.title}"
-                android:textSize="16sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 tools:text="Check out these epic memes guyz!!" />
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:maxLines="1"
+                    android:text="@{viewModel.timeAndAuthor}"
+                    android:textSize="12sp"
+                    tools:text="12 hours ago — jrobinson3k1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.subreddit}"
+                    android:textSize="12sp"
+                    android:visibility="@{viewModel.subredditVisibility}"
+                    tools:text="r/funny" />
+            </LinearLayout>
+
             <TextView
-                android:id="@+id/infoTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:text="@{viewModel.info}"
+                android:text="@{viewModel.commentText}"
                 android:textSize="12sp"
-                tools:text="12 hours ago by jrobinson3k1 to r/madlads" />
+                tools:text="69 comments" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iconImageView"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                app:postHint="@{viewModel.hint}"
+                app:thumbnailUrl="@{viewModel.thumbnailUrl}"
+                tools:src="@tools:sample/avatars" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="2dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{viewModel.scoreText}"
+                android:textSize="14sp"
+                tools:text="9,001" />
         </LinearLayout>
     </LinearLayout>
 </layout>

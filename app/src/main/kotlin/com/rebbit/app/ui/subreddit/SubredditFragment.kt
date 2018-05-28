@@ -40,7 +40,7 @@ class SubredditFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
-        SubredditAdapter({ viewModel.retry() }).apply {
+        SubredditAdapter({ viewModel.retry() }, viewModel.isMultiReddit()).apply {
             binding.recyclerView.adapter = this
             viewModel.posts.safeSubscribe { submitList(it) }
             viewModel.networkState.safeSubscribe { setNetworkState(it) }
