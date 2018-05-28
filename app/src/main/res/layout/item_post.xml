@@ -2,10 +2,15 @@
 <layout>
 
     <data>
-
+        <variable
+            name="post"
+            type="com.rebbit.data.model.Post" />
         <variable
             name="viewModel"
             type="com.rebbit.app.ui.subreddit.PostViewModel" />
+        <variable
+            name="eventHandler"
+            type="com.rebbit.app.ui.subreddit.PostEventHandler" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,23 +29,21 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu"
                 android:text="@{viewModel.title}"
+                android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:text="Check out these epic memes guyz!!" />
 
             <Space
                 android:layout_width="wrap_content"
-                android:layout_height="4dp" />
+                android:layout_height="8dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -74,11 +77,26 @@
                 tools:text="69 comments" />
         </LinearLayout>
 
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackgroundBorderless"
+                android:onClick="@{v -> eventHandler.upvote(post)}"
+                android:src="@drawable/baseline_arrow_upward_24px" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="8dp" />
 
             <ImageView
                 android:id="@+id/iconImageView"
@@ -90,15 +108,27 @@
 
             <Space
                 android:layout_width="wrap_content"
-                android:layout_height="2dp" />
+                android:layout_height="4dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu_medium"
+                android:fontFamily="@font/ubuntu_condensed"
                 android:text="@{viewModel.scoreText}"
-                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
                 tools:text="9,001" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="8dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackgroundBorderless"
+                android:onClick="@{v -> eventHandler.downvote(post)}"
+                android:src="@drawable/baseline_arrow_downward_24px" />
         </LinearLayout>
     </LinearLayout>
 </layout>

@@ -18,6 +18,5 @@
 
     <style name="AppTextAppearance.Small" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/ubuntu</item>
-        <item name="android:textColor">@android:color/black</item>
     </style>
 </resources>

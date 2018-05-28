@@ -17,7 +17,10 @@ import com.rebbit.data.model.Post
 import com.rebbit.data.model.Status.FAILED
 import com.rebbit.data.model.Status.RUNNING
 
-class SubredditAdapter(private val retryCallback: () -> Unit, private val isMultiReddit: Boolean = false) : PagedListAdapter<Post, RecyclerView.ViewHolder>(POST_COMPARATOR) {
+class SubredditAdapter(
+        private val eventHandler: PostEventHandler,
+        private val retryCallback: () -> Unit,
+        private val isMultiReddit: Boolean = false) : PagedListAdapter<Post, RecyclerView.ViewHolder>(POST_COMPARATOR) {
 
     private var networkState: NetworkState? = null
 
@@ -72,6 +75,7 @@ class SubredditAdapter(private val retryCallback: () -> Unit, private val isMult
 
         fun bind(post: Post) {
             viewModel.bind(post.toPostView())
+            binding.post = post
             binding.executePendingBindings()
         }
 

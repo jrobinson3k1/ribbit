@@ -6,4 +6,4 @@
 /build
 /captures
 .externalNativeBuild
-app/src/main/kotlin/com/rebbit/app/di/modules/TokenModule.kt
+app/src/api/kotlin/com/rebbit/app/di/modules/TokenModule.kt
