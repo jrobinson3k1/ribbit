@@ -12,4 +12,8 @@
     <color name="dark_pastel_blue">#779ecb</color>
     <color name="pastel_pink">#ffd1dc</color>
     <color name="pastel_green">#03c03c</color>
+
+    <color name="upvote">#228B22</color>
+    <color name="downvote">#DC143C</color>
+    <color name="nonvote">@color/primary_dark</color>
 </resources>

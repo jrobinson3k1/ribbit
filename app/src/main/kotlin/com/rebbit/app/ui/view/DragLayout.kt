@@ -1,12 +1,17 @@
 package com.rebbit.app.ui.view
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.support.v4.view.ViewCompat
+import android.support.v4.view.ViewPropertyAnimatorCompat
 import android.support.v4.widget.ViewDragHelper
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
+import android.widget.ViewAnimator
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -26,7 +31,7 @@ class DragLayout : FrameLayout {
         private set
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        horizontalRange = -(w * 0.2).toInt()
+        horizontalRange = -(w * 0.15).toInt()
         super.onSizeChanged(w, h, oldw, oldh)
     }
 
@@ -44,11 +49,26 @@ class DragLayout : FrameLayout {
         if (dragHelper.continueSettling(true)) ViewCompat.postInvalidateOnAnimation(this)
     }
 
+    fun close(delay: Long = 0) {
+        opened = false
+
+        val child = getChildAt(childCount - 1)
+        if(child.x != 0F) {
+            val animatorProperties = fun ObjectAnimator.() {
+                duration = 350
+                interpolator = AccelerateDecelerateInterpolator()
+                startDelay = delay
+            }
+            ObjectAnimator.ofInt(child, "left", 0).apply(animatorProperties).start()
+            ObjectAnimator.ofInt(child, "right", child.width).apply(animatorProperties).start()
+        }
+    }
+
     private inner class DragCallback : ViewDragHelper.Callback() {
         private var draggingState: Int = ViewDragHelper.STATE_IDLE
 
         override fun tryCaptureView(child: View, pointerId: Int): Boolean {
-            return child.parent == this@DragLayout
+            return child == getChildAt(childCount - 1)
         }
 
         override fun onViewDragStateChanged(state: Int) {
@@ -56,9 +76,9 @@ class DragLayout : FrameLayout {
 
             if ((draggingState == ViewDragHelper.STATE_DRAGGING || draggingState == ViewDragHelper.STATE_SETTLING)
                     && state == ViewDragHelper.STATE_IDLE) {
-                onDragStarted()
-            } else if (state == ViewDragHelper.STATE_DRAGGING) {
                 onDragEnded()
+            } else if (state == ViewDragHelper.STATE_DRAGGING) {
+                onDragStarted()
             }
 
             draggingState = state
@@ -73,29 +93,27 @@ class DragLayout : FrameLayout {
         }
 
         override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
-            val invalidate = when {
+            val finalLeft: Int = when {
                 xvel < 0 -> {
                     opened = true
-                    dragHelper.settleCapturedViewAt(horizontalRange, 0)
+                    horizontalRange
                 }
                 xvel > 0 -> {
                     opened = false
-                    dragHelper.settleCapturedViewAt(0, 0)
+                    0
                 }
                 else -> {
-                    val left =
-                            if (abs(horizontalRange - releasedChild.left) < abs(releasedChild.left)) {
-                                opened = true
-                                horizontalRange
-                            } else {
-                                opened = false
-                                0
-                            }
-                    dragHelper.settleCapturedViewAt(left, 0)
+                    if (abs(horizontalRange - releasedChild.left) < abs(releasedChild.left)) {
+                        opened = true
+                        horizontalRange
+                    } else {
+                        opened = false
+                        0
+                    }
                 }
             }
 
-            if (invalidate) {
+            if (dragHelper.settleCapturedViewAt(finalLeft, 0)) {
                 ViewCompat.postInvalidateOnAnimation(this@DragLayout)
             }
         }

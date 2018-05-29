@@ -6,7 +6,10 @@ import com.rebbit.data.model.Post
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 
-class SubredditViewModel(client: SubredditClient, val subreddit: String, ioScheduler: Scheduler, uiScheduler: Scheduler) : ViewModel(), PostEventHandler {
+class SubredditViewModel(client: SubredditClient,
+                         val subreddit: String,
+                         ioScheduler: Scheduler,
+                         uiScheduler: Scheduler) : ViewModel(), VoteEventHandler {
 
     private val disposables = CompositeDisposable()
     private val result by lazy { client.getHot(subreddit, ioScheduler, uiScheduler, disposables, 30) }
@@ -32,6 +35,10 @@ class SubredditViewModel(client: SubredditClient, val subreddit: String, ioSched
     }
 
     override fun downvote(post: Post) {
+
+    }
+
+    override fun removeVote(post: Post) {
 
     }
 

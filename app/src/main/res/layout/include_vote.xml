@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#888"
-    android:gravity="end|center_vertical"
-    android:orientation="vertical"
-    android:padding="8dp">
+<layout>
+    <data>
+        <variable
+            name="eventHandler"
+            type="com.rebbit.app.ui.subreddit.VoteViewEventHandler" />
+    </data>
+    <LinearLayout android:id="@+id/voteContainer"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/nonvote"
+        android:gravity="end|center_vertical"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?selectableItemBackgroundBorderless"
-        android:contentDescription="@string/upvote"
-        android:padding="8dp"
-        android:src="@drawable/ic_thumb_up_selector" />
+        <ImageView
+            android:id="@+id/upvoteView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/upvote"
+            android:onClick="@{eventHandler::onUpvoteClicked}"
+            android:padding="8dp"
+            android:src="@drawable/ic_thumb_up_selector" />
 
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="8dp" />
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="8dp" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?selectableItemBackgroundBorderless"
-        android:contentDescription="@string/downvote"
-        android:padding="8dp"
-        android:src="@drawable/ic_thumb_down_selector" />
-</LinearLayout>
+        <ImageView
+            android:id="@+id/downvoteView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
+            android:contentDescription="@string/downvote"
+            android:onClick="@{eventHandler::onDownvoteClicked}"
+            android:padding="8dp"
+            android:src="@drawable/ic_thumb_down_selector" />
+    </LinearLayout>
+</layout>
