@@ -27,7 +27,7 @@ data class Post(val isCrosspostable: Boolean, val subredditId: String, val appro
                 val modReasonTitle: String?, val viewCount: Int?, val archived: Boolean, val clicked: Boolean, val noFollow: Boolean, val author: String, val numCrossposts: Int, val linkFlairText: String,
                 val canModPost: Boolean, val sendReplies: Boolean, val pinned: Boolean, val score: Int, val approvedBy: String?, val over18: Boolean, val reportReasons: String?, val domain: String,
                 val hidden: Boolean, val preview: Preview, val pwls: Int, val thumbnail: String, val edited: Int?, val linkFlairCssClass: String?, val authorFlairCssClass: String?, val contentMode: Boolean,
-                val gilded: Int, val locked: Boolean, val downs: Int, val modReports: List<String>, val subredditSubscribers: Int, val postHint: Hint, val stickied: Boolean, val visited: Boolean,
+                val gilded: Int, val locked: Boolean, val downs: Int, val modReports: List<String>, val subredditSubscribers: Int, val postHint: Hint?, val stickied: Boolean, val visited: Boolean,
                 val canGild: Boolean, val thumbnailHeight: Int?, val name: String, val spoiler: Boolean, val permalink: String, val subredditType: String, val parentWhitelistStatus: String, val hideScore: Boolean,
                 val created: Long, val url: String, val authorFlairText: String?, val quarantine: Boolean, val title: String, val createdUtc: Long, val subredditNamePrefixed: String, val ups: Int,
                 val numComments: Int, val isSelf: Boolean, val whitelistStatus: String?, val modNote: String?, val isVideo: Boolean, val distinguished: String?, val postCategories: String?) {

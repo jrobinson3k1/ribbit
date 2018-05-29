@@ -16,30 +16,38 @@ import com.rebbit.app.R
 import com.rebbit.app.di.Injector
 import com.rebbit.data.model.Post
 
-@BindingAdapter("thumbnailUrl", "postHint", requireAll = true)
-fun ImageView.setThumbnailUrl(thumbnailUrl: String?, hint: Post.Hint?) {
-    var requestBuilder: RequestBuilder<Bitmap> = Injector.get().requestManagerRetriever().get(this).asBitmap()
-    requestBuilder = when {
-        hint == Post.Hint.Self -> requestBuilder.load(R.drawable.ic_text)
-        thumbnailUrl == null || !thumbnailUrl.isImage() -> requestBuilder.load(R.drawable.ic_link)
-        else -> requestBuilder.load(thumbnailUrl)
+@BindingAdapter("thumbnailFromPost")
+fun ImageView.setThumbnailFromPost(post: Post?) {
+    if (post == null) {
+        setImageDrawable(null)
+        return
     }
+
+    val requestBuilder: RequestBuilder<Bitmap> = Injector.get().requestManagerRetriever().get(this).asBitmap().load(
+            if (post.isSelf) R.drawable.ic_text
+            else if (!post.thumbnail.isImage()) R.drawable.ic_link
+            else post.thumbnail
+    )
 
     requestBuilder.apply(RequestOptions.centerCropTransform()).into(object : BitmapImageViewTarget(this) {
         override fun setResource(resource: Bitmap?) {
             var circularBitmapDrawable: RoundedBitmapDrawable? = null
             if (resource != null) {
-                val colorResId = when (hint) {
-                    Post.Hint.Image -> R.color.dark_pastel_blue
-                    Post.Hint.Video -> R.color.pastel_pink
-                    Post.Hint.Self -> android.R.color.transparent
-                    else -> android.R.color.black
-                }
+                val colorResId =
+                        if (post.postHint == null) android.R.color.transparent
+                        else when (post.postHint) {
+                            Post.Hint.Image -> R.color.dark_pastel_blue
+                            Post.Hint.Video -> R.color.pastel_pink
+                            else -> android.R.color.black
+                        }
 
-                circularBitmapDrawable = RoundedBitmapDrawableFactory.create(this@setThumbnailUrl.context.resources, addBorder(resource, this@setThumbnailUrl.context, colorResId))
+                circularBitmapDrawable = RoundedBitmapDrawableFactory.create(
+                        this@setThumbnailFromPost.context.resources,
+                        addBorder(resource, this@setThumbnailFromPost.context, colorResId)
+                )
                 circularBitmapDrawable.isCircular = true
             }
-            this@setThumbnailUrl.setImageDrawable(circularBitmapDrawable)
+            this@setThumbnailFromPost.setImageDrawable(circularBitmapDrawable)
         }
     })
 }

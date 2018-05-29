@@ -115,8 +115,7 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:contentDescription="@string/thumbnail"
-                        app:postHint="@{viewModel.hint}"
-                        app:thumbnailUrl="@{viewModel.thumbnailUrl}"
+                        app:thumbnailFromPost="@{post}"
                         tools:src="@tools:sample/avatars" />
 
                     <Space
