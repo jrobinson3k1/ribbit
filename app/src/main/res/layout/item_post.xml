@@ -13,122 +13,139 @@
             type="com.rebbit.app.ui.subreddit.PostEventHandler" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="2dp"
-        android:background="#ffffff"
-        android:gravity="center_vertical"
-        android:padding="8dp">
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="2dp">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#aaa" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.title}"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                tools:text="Check out these epic memes guyz!!" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="8dp" />
+        <com.rebbit.app.ui.view.DragLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginEnd="6dp"
+                android:background="@android:color/white"
+                android:elevation="2dp"
+                android:gravity="center_vertical"
+                android:padding="8dp">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:maxLines="1"
-                    android:text="@{viewModel.timeAndAuthor}"
-                    android:textSize="12sp"
-                    tools:text="12 hours ago — jrobinson3k1" />
+                    android:orientation="vertical">
 
-                <TextView
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.title}"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="Check out these epic memes guyz!!" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="8dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:text="@{viewModel.timeAndAuthor}"
+                            android:textSize="12sp"
+                            tools:text="12 hours ago — jrobinson3k1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{viewModel.subreddit}"
+                            android:textSize="12sp"
+                            android:visibility="@{viewModel.subredditVisibility}"
+                            tools:text="r/funny" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:text="@{viewModel.commentText}"
+                        android:textSize="12sp"
+                        tools:text="69 comments" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="16dp"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.subreddit}"
-                    android:textSize="12sp"
-                    android:visibility="@{viewModel.subredditVisibility}"
-                    tools:text="r/funny" />
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="?selectableItemBackgroundBorderless"-->
+                    <!--android:onClick="@{v -> eventHandler.upvote(post)}"-->
+                    <!--android:src="@drawable/baseline_arrow_upward_24px" />-->
+
+                    <!--<Space-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="8dp" />-->
+
+                    <ImageView
+                        android:id="@+id/iconImageView"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        app:postHint="@{viewModel.hint}"
+                        app:thumbnailUrl="@{viewModel.thumbnailUrl}"
+                        tools:src="@tools:sample/avatars" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/ubuntu_condensed"
+                        android:text="@{viewModel.scoreText}"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp"
+                        tools:text="9,001" />
+
+                    <!--<Space-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="8dp" />-->
+
+                    <!--<ImageView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="?selectableItemBackgroundBorderless"-->
+                    <!--android:onClick="@{v -> eventHandler.downvote(post)}"-->
+                    <!--android:src="@drawable/baseline_arrow_downward_24px" />-->
+                </LinearLayout>
             </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="@{viewModel.commentText}"
-                android:textSize="12sp"
-                tools:text="69 comments" />
-        </LinearLayout>
-
-        <Space
-            android:layout_width="16dp"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?selectableItemBackgroundBorderless"
-                android:onClick="@{v -> eventHandler.upvote(post)}"
-                android:src="@drawable/baseline_arrow_upward_24px" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="8dp" />
-
-            <ImageView
-                android:id="@+id/iconImageView"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                app:postHint="@{viewModel.hint}"
-                app:thumbnailUrl="@{viewModel.thumbnailUrl}"
-                tools:src="@tools:sample/avatars" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="4dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu_condensed"
-                android:text="@{viewModel.scoreText}"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                tools:text="9,001" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="8dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?selectableItemBackgroundBorderless"
-                android:onClick="@{v -> eventHandler.downvote(post)}"
-                android:src="@drawable/baseline_arrow_downward_24px" />
-        </LinearLayout>
-    </LinearLayout>
+        </com.rebbit.app.ui.view.DragLayout>
+    </FrameLayout>
 </layout>

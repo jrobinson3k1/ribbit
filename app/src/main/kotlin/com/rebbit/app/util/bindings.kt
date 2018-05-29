@@ -7,8 +7,8 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v4.widget.SwipeRefreshLayout
+import android.view.View
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.BitmapImageViewTarget
@@ -52,6 +52,11 @@ fun setRefreshing(swipeRefreshLayout: SwipeRefreshLayout, refreshing: Boolean) {
 @BindingAdapter("onRefresh")
 fun setOnRefresh(swipeRefreshLayout: SwipeRefreshLayout, onRefresh: Runnable) {
     swipeRefreshLayout.setOnRefreshListener { onRefresh.run() }
+}
+
+@BindingAdapter("onTouch")
+fun setOnTouchListener(view: View, listener: View.OnTouchListener) {
+    view.setOnTouchListener(listener)
 }
 
 private val IMAGE_REGEX = Regex("^.+\\.(?:jpg|png)\$")
