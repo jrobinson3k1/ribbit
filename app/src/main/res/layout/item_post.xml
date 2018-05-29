@@ -21,12 +21,11 @@
         android:layout_marginBottom="2dp"
         android:layout_marginEnd="4dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="2dp">
+        android:layout_marginTop="2dp"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#aaa" />
+        <include layout="@layout/include_vote" />
 
         <com.rebbit.app.ui.view.DragLayout
             android:layout_width="match_parent"
@@ -38,22 +37,24 @@
                 android:layout_marginEnd="6dp"
                 android:background="@android:color/white"
                 android:elevation="2dp"
-                android:gravity="center_vertical"
                 android:padding="8dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:minHeight="52dp"
+                        android:gravity="center_vertical"
+                        android:fontFamily="@font/ubuntu_medium"
                         android:text="@{viewModel.title}"
                         android:textColor="@android:color/black"
                         android:textSize="18sp"
-                        android:textStyle="bold"
                         tools:text="Check out these epic memes guyz!!" />
 
                     <Space
@@ -63,33 +64,40 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:gravity="bottom"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:maxLines="1"
+                                android:text="@{viewModel.timeAndAuthor}"
+                                android:textSize="12sp"
+                                tools:text="12 hours ago — jrobinson3k1" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.subreddit}"
+                                android:textSize="12sp"
+                                android:visibility="@{viewModel.subredditVisibility}"
+                                tools:text="r/funny" />
+                        </LinearLayout>
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:maxLines="1"
-                            android:text="@{viewModel.timeAndAuthor}"
+                            android:text="@{viewModel.commentText}"
                             android:textSize="12sp"
-                            tools:text="12 hours ago — jrobinson3k1" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{viewModel.subreddit}"
-                            android:textSize="12sp"
-                            android:visibility="@{viewModel.subredditVisibility}"
-                            tools:text="r/funny" />
+                            tools:text="69 comments" />
                     </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:text="@{viewModel.commentText}"
-                        android:textSize="12sp"
-                        tools:text="69 comments" />
                 </LinearLayout>
 
                 <Space
@@ -98,25 +106,15 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical">
-
-                    <!--<ImageView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="?selectableItemBackgroundBorderless"-->
-                    <!--android:onClick="@{v -> eventHandler.upvote(post)}"-->
-                    <!--android:src="@drawable/baseline_arrow_upward_24px" />-->
-
-                    <!--<Space-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="8dp" />-->
 
                     <ImageView
                         android:id="@+id/iconImageView"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
+                        android:contentDescription="@string/thumbnail"
                         app:postHint="@{viewModel.hint}"
                         app:thumbnailUrl="@{viewModel.thumbnailUrl}"
                         tools:src="@tools:sample/avatars" />
@@ -133,17 +131,6 @@
                         android:textColor="@android:color/black"
                         android:textSize="18sp"
                         tools:text="9,001" />
-
-                    <!--<Space-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="8dp" />-->
-
-                    <!--<ImageView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="?selectableItemBackgroundBorderless"-->
-                    <!--android:onClick="@{v -> eventHandler.downvote(post)}"-->
-                    <!--android:src="@drawable/baseline_arrow_downward_24px" />-->
                 </LinearLayout>
             </LinearLayout>
         </com.rebbit.app.ui.view.DragLayout>

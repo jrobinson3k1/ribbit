@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import com.rebbit.app.R
 import com.rebbit.app.databinding.FragmentSubredditBinding
 import com.rebbit.app.di.Injector
-import com.rebbit.app.ui.BaseFragment
+import com.rebbit.app.ui.base.BaseFragment
 import com.rebbit.data.model.NetworkState
 import javax.inject.Inject
 

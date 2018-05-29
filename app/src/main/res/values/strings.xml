@@ -9,6 +9,9 @@
     <string name="time_and_author">%1$s ago — %2$s</string>
     <string name="app_name">Ribbit for Reddit</string>
     <string name="retry">Retry</string>
+    <string name="upvote">Upvote</string>
+    <string name="downvote">Downvote</string>
+    <string name="thumbnail">Thumbnail</string>
     <plurals name="years">
         <item quantity="one">%d year</item>
         <item quantity="other">%d years</item>

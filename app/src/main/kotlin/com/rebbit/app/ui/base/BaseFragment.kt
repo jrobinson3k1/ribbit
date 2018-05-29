@@ -1,4 +1,4 @@
-package com.rebbit.app.ui
+package com.rebbit.app.ui.base
 
 import android.support.v4.app.Fragment
 import io.reactivex.Observable
