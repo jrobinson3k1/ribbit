@@ -29,7 +29,10 @@
 
             <include
                 android:id="@+id/vote"
-                layout="@layout/include_vote" />
+                layout="@layout/include_vote"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end" />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -3,15 +3,12 @@ package com.rebbit.app.ui.view
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.support.v4.view.ViewCompat
-import android.support.v4.view.ViewPropertyAnimatorCompat
 import android.support.v4.widget.ViewDragHelper
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
-import android.widget.ViewAnimator
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -31,8 +28,8 @@ class DragLayout : FrameLayout {
         private set
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        horizontalRange = -(w * 0.15).toInt()
         super.onSizeChanged(w, h, oldw, oldh)
+        horizontalRange = -getChildAt(0).measuredWidth + (getChildAt(childCount - 1).layoutParams as FrameLayout.LayoutParams).marginEnd
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
@@ -53,7 +50,7 @@ class DragLayout : FrameLayout {
         opened = false
 
         val child = getChildAt(childCount - 1)
-        if(child.x != 0F) {
+        if (child.x != 0F) {
             val animatorProperties = fun ObjectAnimator.() {
                 duration = 350
                 interpolator = AccelerateDecelerateInterpolator()
