@@ -9,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 class SubredditViewModel(client: SubredditClient,
                          val subreddit: String,
                          ioScheduler: Scheduler,
-                         uiScheduler: Scheduler) : ViewModel(), VoteEventHandler {
+                         uiScheduler: Scheduler) : ViewModel(), PostEventHandler {
 
     private val disposables = CompositeDisposable()
     private val result by lazy { client.getHot(subreddit, ioScheduler, uiScheduler, disposables, 30) }

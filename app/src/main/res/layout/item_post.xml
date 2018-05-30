@@ -8,6 +8,9 @@
         <variable
             name="viewModel"
             type="com.rebbit.app.ui.subreddit.PostViewModel" />
+        <variable
+            name="eventHandler"
+            type="com.rebbit.app.ui.subreddit.PostViewEventHandler" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -25,14 +28,16 @@
         <com.rebbit.app.ui.view.DragLayout
             android:id="@+id/dragLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:dragEdge="right">
 
             <include
                 android:id="@+id/vote"
                 layout="@layout/include_vote"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="end" />
+                android:layout_gravity="end"
+                app:eventHandler="@{eventHandler}" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -40,6 +45,7 @@
                 android:layout_marginEnd="6dp"
                 android:background="@android:color/white"
                 android:elevation="2dp"
+                android:onClick="@{eventHandler::onPostClicked}"
                 android:padding="8dp">
 
                 <LinearLayout
@@ -117,6 +123,7 @@
                         android:layout_width="64dp"
                         android:layout_height="64dp"
                         android:contentDescription="@string/thumbnail"
+                        android:onClick="@{eventHandler::onThumbnailClicked}"
                         app:thumbnailFromPost="@{post}"
                         tools:src="@tools:sample/avatars" />
 

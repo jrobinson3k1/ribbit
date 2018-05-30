@@ -1,29 +1,22 @@
 package com.rebbit.app.ui.subreddit
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.arch.paging.PagedListAdapter
-import android.databinding.DataBindingUtil
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import com.rebbit.app.R
-import com.rebbit.app.databinding.ItemPostBinding
 import com.rebbit.data.model.NetworkState
 import com.rebbit.data.model.Post
 import com.rebbit.data.model.Status.FAILED
 import com.rebbit.data.model.Status.RUNNING
 
 class SubredditAdapter(
-        private val eventHandler: VoteEventHandler,
+        private val eventHandler: PostEventHandler,
         private val retryCallback: () -> Unit,
         private val isMultiReddit: Boolean = false) : PagedListAdapter<Post, RecyclerView.ViewHolder>(POST_COMPARATOR) {
 
@@ -73,86 +66,6 @@ class SubredditAdapter(
     }
 
     private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
-
-    class PostViewHolder(private val binding: ItemPostBinding,
-                         private val eventHandler: VoteEventHandler,
-                         showSubreddit: Boolean) : RecyclerView.ViewHolder(binding.root), VoteViewEventHandler {
-
-        private val viewModel = PostViewModel(binding.root.context, showSubreddit)
-
-        init {
-            binding.viewModel = viewModel
-            binding.vote.eventHandler = this
-
-            binding.vote.upvoteView.setOnClickListener {
-                it.isSelected = true
-            }
-        }
-
-        override fun onUpvoteClicked(v: View) {
-            binding.vote.apply {
-                upvoteView.isSelected = !upvoteView.isSelected
-                downvoteView.isSelected = false
-                onVoteChanged(upvoteView.isSelected, downvoteView.isSelected)
-            }
-        }
-
-        override fun onDownvoteClicked(v: View) {
-            binding.vote.apply {
-                downvoteView.isSelected = !downvoteView.isSelected
-                upvoteView.isSelected = false
-                onVoteChanged(upvoteView.isSelected, downvoteView.isSelected)
-            }
-        }
-
-        private fun onVoteChanged(upvote: Boolean, downvote: Boolean) {
-            updateVoteColor()
-            binding.dragLayout.close(100)
-            binding.post!!.apply {
-                when {
-                    upvote -> eventHandler.upvote(this)
-                    downvote -> eventHandler.downvote(this)
-                    else -> eventHandler.removeVote(this)
-                }
-            }
-        }
-
-        private fun updateVoteColor() {
-            binding.vote.apply {
-                val fromColor = (voteContainer.background as ColorDrawable).color
-                val toColor = (
-                        with(binding.root.context) {
-                            when {
-                                upvoteView.isSelected -> getColor(R.color.upvote)
-                                downvoteView.isSelected -> getColor(R.color.downvote)
-                                else -> getColor(R.color.nonvote)
-                            }
-                        })
-
-                ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor).apply {
-                    duration = 350
-                    interpolator = LinearInterpolator()
-                    addUpdateListener {
-                        voteContainer.setBackgroundColor(it.animatedValue as Int)
-                    }
-                }.start()
-            }
-        }
-
-        fun bind(post: Post) {
-            viewModel.bind(post.toPostView())
-            binding.post = post
-            binding.executePendingBindings()
-        }
-
-        companion object {
-            fun create(parent: ViewGroup, eventHandler: VoteEventHandler, showSubreddit: Boolean) = PostViewHolder(DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.context),
-                    R.layout.item_post, parent,
-                    false
-            ), eventHandler, showSubreddit)
-        }
-    }
 
     class NetworkStateViewHolder(view: View, private val retryCallback: () -> Unit) : RecyclerView.ViewHolder(view) {
 

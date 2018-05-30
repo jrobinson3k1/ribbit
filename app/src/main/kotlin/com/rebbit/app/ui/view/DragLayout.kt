@@ -27,14 +27,33 @@ class DragLayout : FrameLayout {
     var opened = false
         private set
 
+    var dragDist: Float = 0F
+    var prevX: Float = -1F
+
+    private lateinit var dragView: View
+    private lateinit var revealView: View
+
+    override fun onFinishInflate() {
+        super.onFinishInflate()
+        dragView = getChildAt(1)
+        revealView = getChildAt(0)
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        horizontalRange = -getChildAt(0).measuredWidth + (getChildAt(childCount - 1).layoutParams as FrameLayout.LayoutParams).marginEnd
+        horizontalRange = -revealView.measuredWidth + (dragView.layoutParams as FrameLayout.LayoutParams).marginEnd
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        return if (dragHelper.shouldInterceptTouchEvent(ev)) true
-        else super.onInterceptTouchEvent(ev)
+        dragHelper.processTouchEvent(ev)
+        accumulateDragDist(ev)
+
+        val couldBecomeClick = couldBecomeClick(ev)
+        val settling = dragHelper.viewDragState == ViewDragHelper.STATE_SETTLING
+
+        prevX = ev.x
+
+        return !couldBecomeClick && settling
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -44,6 +63,36 @@ class DragLayout : FrameLayout {
 
     override fun computeScroll() {
         if (dragHelper.continueSettling(true)) ViewCompat.postInvalidateOnAnimation(this)
+    }
+
+    private fun couldBecomeClick(ev: MotionEvent): Boolean {
+        return isInMainView(ev) && !shouldInitiateADrag()
+    }
+
+    private fun isInMainView(ev: MotionEvent): Boolean {
+        val x = ev.x
+        val y = ev.y
+
+        val withinVertical = dragView.top <= y && y <= dragView.bottom
+        val withinHorizontal = dragView.left <= x && x <= dragView.right
+
+        return withinVertical && withinHorizontal
+    }
+
+    private fun shouldInitiateADrag(): Boolean {
+        val minDistToInitiateDrag = dragHelper.touchSlop.toFloat()
+        return dragDist >= minDistToInitiateDrag
+    }
+
+    private fun accumulateDragDist(ev: MotionEvent) {
+        if (ev.action == MotionEvent.ACTION_DOWN) {
+            dragDist = 0f
+            return
+        }
+
+        val dragged = Math.abs(ev.x - prevX)
+
+        dragDist += dragged
     }
 
     fun close(delay: Long = 0) {
@@ -65,7 +114,7 @@ class DragLayout : FrameLayout {
         private var draggingState: Int = ViewDragHelper.STATE_IDLE
 
         override fun tryCaptureView(child: View, pointerId: Int): Boolean {
-            return child == getChildAt(childCount - 1)
+            return child == dragView
         }
 
         override fun onViewDragStateChanged(state: Int) {
