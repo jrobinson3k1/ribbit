@@ -28,8 +28,7 @@
         <com.rebbit.app.ui.view.DragLayout
             android:id="@+id/dragLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:dragEdge="right">
+            android:layout_height="wrap_content">
 
             <include
                 android:id="@+id/vote"
