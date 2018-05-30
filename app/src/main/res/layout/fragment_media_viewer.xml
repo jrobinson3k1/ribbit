@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.rebbit.app.ui.media.MediaViewerViewModel" />
+    </data>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Dummy view to assist with resizing the dialog after the image is loaded -->
+        <View
+            android:id="@+id/dummyView"
+            android:layout_width="1000dp"
+            android:layout_height="1000dp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            app:url="@{viewModel.mediaUrl}" />
+    </FrameLayout>
+</layout>
