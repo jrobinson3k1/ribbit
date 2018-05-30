@@ -4,16 +4,11 @@ import android.content.Context
 import android.databinding.BindingAdapter
 import android.graphics.*
 import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import android.widget.ImageView
-import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.rebbit.app.R
-import com.rebbit.app.di.Injector
+import com.rebbit.app.util.glide.GlideApp
 import com.rebbit.data.model.Post
 
 @BindingAdapter("thumbnailFromPost")
@@ -23,33 +18,33 @@ fun ImageView.setThumbnailFromPost(post: Post?) {
         return
     }
 
-    val requestBuilder: RequestBuilder<Bitmap> = Injector.get().requestManagerRetriever().get(this).asBitmap().load(
-            if (post.isSelf) R.drawable.ic_text
-            else if (!post.thumbnail.isImage()) R.drawable.ic_link
-            else post.thumbnail
-    )
+    GlideApp.with(this)
+            .load(
+                    if (post.isSelf) R.drawable.ic_text
+                    else if (!post.thumbnail.isImage()) R.drawable.ic_link
+                    else post.thumbnail
+            )
+            .circleOutline(
+                    context.getColor(
+                            if (post.postHint == null) android.R.color.transparent
+                            else when (post.postHint) {
+                                Post.Hint.Image -> R.color.dark_pastel_blue
+                                Post.Hint.Video -> R.color.pastel_pink
+                                else -> android.R.color.black
+                            }
+                    )
+            )
+            .into(this)
+}
 
-    requestBuilder.apply(RequestOptions.centerCropTransform()).into(object : BitmapImageViewTarget(this) {
-        override fun setResource(resource: Bitmap?) {
-            var circularBitmapDrawable: RoundedBitmapDrawable? = null
-            if (resource != null) {
-                val colorResId =
-                        if (post.postHint == null) android.R.color.transparent
-                        else when (post.postHint) {
-                            Post.Hint.Image -> R.color.dark_pastel_blue
-                            Post.Hint.Video -> R.color.pastel_pink
-                            else -> android.R.color.black
-                        }
+@BindingAdapter("url")
+fun ImageView.setUrl(url: String?) {
+    if (url == null || !url.isSupportedImageUrl()) {
+        setImageDrawable(null)
+        return
+    }
 
-                circularBitmapDrawable = RoundedBitmapDrawableFactory.create(
-                        this@setThumbnailFromPost.context.resources,
-                        addBorder(resource, this@setThumbnailFromPost.context, colorResId)
-                )
-                circularBitmapDrawable.isCircular = true
-            }
-            this@setThumbnailFromPost.setImageDrawable(circularBitmapDrawable)
-        }
-    })
+    GlideApp.with(this).load(url).into(this)
 }
 
 @BindingAdapter("refreshing")
