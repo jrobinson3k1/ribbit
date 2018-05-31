@@ -55,6 +55,10 @@ kapt {
     }
 }
 
+repositories {
+    maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local' }
+}
+
 dependencies {
     implementation project(':data')
 
@@ -77,6 +81,8 @@ dependencies {
 
     implementation "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
+
+    implementation 'com.jsibbold:zoomage:1.2.0-SNAPSHOT'
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'

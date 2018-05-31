@@ -4,7 +4,7 @@ import android.content.Context
 import com.rebbit.app.di.AppScope
 import com.rebbit.app.di.modules.ApiModule
 import com.rebbit.app.di.modules.StoreModule
-import com.rebbit.app.ui.media.MediaViewerFragmentComponent
+import com.rebbit.app.ui.media.MediaViewerActivityComponent
 import com.rebbit.app.ui.subreddit.SubredditFragmentComponent
 import dagger.BindsInstance
 import dagger.Component
@@ -18,7 +18,7 @@ interface ApplicationComponent {
 
     fun subredditFragmentBuilder(): SubredditFragmentComponent.Builder
 
-    fun mediaViewerFragmentBuilder(): MediaViewerFragmentComponent.Builder
+    fun mediaViewerActivityBuilder(): MediaViewerActivityComponent.Builder
 
     @Component.Builder
     interface Builder {

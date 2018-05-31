@@ -123,6 +123,7 @@
                         android:layout_height="64dp"
                         android:contentDescription="@string/thumbnail"
                         android:onClick="@{eventHandler::onThumbnailClicked}"
+                        android:transitionName="@{post.name}"
                         app:thumbnailFromPost="@{post}"
                         tools:src="@tools:sample/avatars" />
 

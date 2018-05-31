@@ -1,10 +1,14 @@
 package com.rebbit.app.util
 
 import android.databinding.BindingAdapter
-import android.net.Uri
+import android.graphics.drawable.Drawable
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.View
 import android.widget.ImageView
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.rebbit.app.R
 import com.rebbit.app.util.glide.GlideApp
 import com.rebbit.data.model.Post
@@ -35,8 +39,8 @@ fun ImageView.setThumbnailFromPost(post: Post?) {
             .into(this)
 }
 
-@BindingAdapter("url")
-fun ImageView.setUrl(url: String?) {
+@BindingAdapter("url", "onLoaded")
+fun ImageView.setUrl(url: String?, listener: OnImageLoadedListener?) {
     if (url == null || (!url.isSupportedImageUrl() && !url.isGif())) {
         setImageDrawable(null)
         return
@@ -45,6 +49,18 @@ fun ImageView.setUrl(url: String?) {
     GlideApp.with(this)
             .asDrawable()
             .load(url)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                    listener?.onLoadFailed()
+                    return false
+                }
+
+                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                    listener?.onLoadSuccess()
+                    return false
+                }
+
+            })
             .into(this)
 }
 

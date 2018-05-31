@@ -6,6 +6,7 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -15,10 +16,11 @@ import android.view.animation.LinearInterpolator
 import android.widget.Toast
 import com.rebbit.app.R
 import com.rebbit.app.databinding.ItemPostBinding
-import com.rebbit.app.ui.media.MediaViewerDialogFragment
+import com.rebbit.app.ui.media.MediaViewerActivity
 import com.rebbit.data.model.Post
 
-class PostViewHolder(private val binding: ItemPostBinding,
+class PostViewHolder(private val activity: FragmentActivity,
+                     private val binding: ItemPostBinding,
                      private val eventHandler: PostEventHandler,
                      showSubreddit: Boolean) : RecyclerView.ViewHolder(binding.root), PostViewEventHandler {
 
@@ -36,10 +38,13 @@ class PostViewHolder(private val binding: ItemPostBinding,
     }
 
     override fun onThumbnailClicked(v: View) {
-        if (MediaViewerDialogFragment.isEmbeddableMedia(post.url)) {
-            MediaViewerDialogFragment.newInstance(post.url).show((v.context as FragmentActivity).supportFragmentManager, null)
-        } else {
-            v.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(post.url)))
+        activity.run {
+            if (MediaViewerActivity.isEmbeddableMedia(post.url)) {
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, v, v.transitionName)
+                startActivity(MediaViewerActivity.getStartIntent(this, post.url, v.transitionName), options.toBundle())
+            } else {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(post.url)))
+            }
         }
     }
 
@@ -69,6 +74,14 @@ class PostViewHolder(private val binding: ItemPostBinding,
         }
     }
 
+    fun bind(post: Post) {
+        this.post = post
+
+        viewModel.bind(post.toPostView())
+        binding.post = post
+        binding.executePendingBindings()
+    }
+
     private fun updateVoteColor() {
         binding.vote.apply {
             val fromColor = (voteContainer.background as ColorDrawable).color
@@ -91,19 +104,19 @@ class PostViewHolder(private val binding: ItemPostBinding,
         }
     }
 
-    fun bind(post: Post) {
-        this.post = post
-
-        viewModel.bind(post.toPostView())
-        binding.post = post
-        binding.executePendingBindings()
-    }
-
     companion object {
-        fun create(parent: ViewGroup, eventHandler: PostEventHandler, showSubreddit: Boolean) = PostViewHolder(DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
-                R.layout.item_post, parent,
-                false
-        ), eventHandler, showSubreddit)
+        fun create(activity: FragmentActivity,
+                   parent: ViewGroup,
+                   eventHandler: PostEventHandler,
+                   showSubreddit: Boolean) =
+                PostViewHolder(
+                        activity,
+                        DataBindingUtil.inflate(LayoutInflater.from(parent.context),
+                                R.layout.item_post, parent,
+                                false
+                        ),
+                        eventHandler,
+                        showSubreddit
+                )
     }
 }

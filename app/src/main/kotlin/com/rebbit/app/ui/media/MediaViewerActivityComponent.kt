@@ -3,7 +3,7 @@ package com.rebbit.app.ui.media
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import com.rebbit.app.di.PerFragment
 import dagger.BindsInstance
 import dagger.Module
@@ -11,31 +11,31 @@ import dagger.Provides
 import dagger.Subcomponent
 import javax.inject.Named
 
-@Subcomponent(modules = [MediaViewerFragmentComponent.MediaViewerFragmentModule::class])
+@Subcomponent(modules = [MediaViewerActivityComponent.MediaViewerActivityModule::class])
 @PerFragment
-interface MediaViewerFragmentComponent {
+interface MediaViewerActivityComponent {
 
-    fun inject(target: MediaViewerDialogFragment)
+    fun inject(target: MediaViewerActivity)
 
     @Subcomponent.Builder
     interface Builder {
         @BindsInstance
-        fun mediaUrl(@Named("mediaUrl") mediaUrl: String): MediaViewerFragmentComponent.Builder
+        fun mediaUrl(@Named("media_url") mediaUrl: String): MediaViewerActivityComponent.Builder
 
         @BindsInstance
-        fun fragment(@Named("this_fragment") fragment: Fragment): MediaViewerFragmentComponent.Builder
+        fun activity(@Named("this_activity") activity: FragmentActivity): MediaViewerActivityComponent.Builder
 
-        fun build(): MediaViewerFragmentComponent
+        fun build(): MediaViewerActivityComponent
     }
 
     @Module
-    class MediaViewerFragmentModule {
+    class MediaViewerActivityModule {
 
         @Provides
         @PerFragment
-        fun providesViewModel(@Named("this_fragment") fragment: Fragment,
-                              @Named("mediaUrl") mediaUrl: String): MediaViewerViewModel {
-            return ViewModelProviders.of(fragment, object : ViewModelProvider.Factory {
+        fun providesViewModel(@Named("this_activity") activity: FragmentActivity,
+                              @Named("media_url") mediaUrl: String): MediaViewerViewModel {
+            return ViewModelProviders.of(activity, object : ViewModelProvider.Factory {
                 override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                     @Suppress("UNCHECKED_CAST")
                     return MediaViewerViewModel(mediaUrl) as T

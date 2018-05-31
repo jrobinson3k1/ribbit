@@ -1,6 +1,7 @@
 package com.rebbit.app.ui.subreddit
 
 import android.arch.paging.PagedListAdapter
+import android.support.v4.app.FragmentActivity
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.rebbit.data.model.Status.FAILED
 import com.rebbit.data.model.Status.RUNNING
 
 class SubredditAdapter(
+        private val activity: FragmentActivity,
         private val eventHandler: PostEventHandler,
         private val retryCallback: () -> Unit,
         private val isMultiReddit: Boolean = false) : PagedListAdapter<Post, RecyclerView.ViewHolder>(POST_COMPARATOR) {
@@ -24,7 +26,7 @@ class SubredditAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            R.layout.item_post -> PostViewHolder.create(parent, eventHandler, isMultiReddit)
+            R.layout.item_post -> PostViewHolder.create(activity, parent, eventHandler, isMultiReddit)
             R.layout.item_network_state -> NetworkStateViewHolder.create(parent, retryCallback)
             else -> throw IllegalArgumentException("unknown view type $viewType")
         }
